@@ -1,31 +1,28 @@
 import ContaBancaria from "./ContaBancaria";
 
+
 export default class ContaCorrente extends ContaBancaria {
-    private readonly limite: number;
-    private readonly taxa: number;
     
-    constructor(titular: string, agencia: string, numeroConta: string, saldo: number = 0, limite: number, taxa: number) {
-        super(titular, agencia, numeroConta, saldo);
-        this.limite = limite;
-        this.taxa = taxa;
+    constructor(titular: string, agencia: string, numeroConta: string, limite: number, taxa: number, saldo?: number) {
+        super(titular, agencia, numeroConta, limite, taxa,  saldo ?? 0);
     }
 
     //metodos
     sacar(valor: number): void {
-        let saldo = this.saldo + this.limite - valor;
+        let saldo = (this.saldo ?? 0) - valor;
 
         if (saldo < 0) {
             console.log('Saldo insuficiente');
             return
         }
 
-        this.saldo = this.saldo - valor;
-        console.log(`Saque de R$${valor} na conta ${this.numeroConta} realizado com sucesso`);
+        this.saldo = (this.saldo ?? 0) - valor;
+        console.log(`Saque de R$${valor} na conta n.º${this.numeroConta} realizado com sucesso`);
     }
 
     depositar(valor: number): void {
-        this.saldo += valor;
-        console.log(`Depósito de R$${valor} na conta ${this.numeroConta} realizado com sucesso`);
+        this.saldo = (this.saldo ?? 0) + valor;
+        console.log(`Depósito de R$${valor} na conta n.º${this.numeroConta} realizado com sucesso`);
     }
 
     transferencia(contaOrigem: ContaBancaria, contaDestino: ContaBancaria, valor: number): void {
@@ -34,10 +31,10 @@ export default class ContaCorrente extends ContaBancaria {
     }
 
     calcularSaldoDisponivel(): number {
-        const saldoDisponivel = this.saldo + this.limite - (this.saldo * this.taxa);
-        console.log("\n============ Saldo Disponivel ============")
-        console.log("\nTaxa  de utilizaçaõa do chque especial: R$" + this.saldo * this.taxa);
-        console.log(`\nSaldo disponível na conta ${this.numeroConta}: R$${saldoDisponivel}`);
+        const saldoDisponivel = (this.saldo ?? 0) + this.limite - ((this.saldo ?? 0) * this.taxa);
+        console.log("\N============ Saldo Disponivel ============")
+        console.log("Taxa  de utilizaçaõa do chque especial: R$" + (this.saldo ?? 0) * this.taxa);
+        console.log(`Valor disponível para uso na conta n.º${this.numeroConta}: R$${saldoDisponivel}`);
         return saldoDisponivel;
     }
 }
