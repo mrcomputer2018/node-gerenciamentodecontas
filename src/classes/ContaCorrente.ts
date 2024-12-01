@@ -9,7 +9,7 @@ export default class ContaCorrente extends ContaBancaria {
 
     //metodos
     sacar(valor: number): void {
-        let saldo = (this.saldo ?? 0) - valor;
+        let saldo = ((this.saldo ?? 0) - valor) - valor * this.taxa;
 
         if (saldo < 0) {
             console.log('Saldo insuficiente');
